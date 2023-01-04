@@ -37,8 +37,8 @@ jobs:
       DOCKER_REPOSITORY: richiebono
       IMAGE_NAME: bono-orders-api
       IMAGE_TAG: ${{github.run_number}}
-      WORKING_DIRECTORY: ./orders-backend/src/1-Api/Bono.Orders.Api/
-
+      WORKING_DIRECTORY: ./orders-backend/src/
+                         
     defaults:
       run:
         shell: bash
