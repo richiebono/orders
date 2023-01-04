@@ -61,7 +61,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     
     - name: Build Docker Image ${{ env.IMAGE_NAME }}
-      run: docker build -t ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -t ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}:latest 1-Api/Bono.Orders.Api/Dockerfile
+      run: docker build -t ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -t ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}:latest ./1-Api/Bono.Orders.Api/
       
     - name: Push Docker Image ${{ env.IMAGE_NAME }}
       run: docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}
