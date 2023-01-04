@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
 using Bono.Orders.Application.Interfaces;
@@ -18,20 +17,20 @@ namespace Bono.Orders.Application.Services
     {
 
         private readonly IOrderRepository _orderRepository;
-        private readonly IUserService _userService;        
-        private readonly IOrderTypeService _orderTypeService;
+        private readonly IUserRepository _userRepository;        
+        private readonly IOrderTypeRepository _orderTypeRepository;
         private readonly IMapper _mapper;
         private readonly ValidationResult _validationResult;
 
         public OrderService(IOrderRepository orderRepository,
-            IUserService userService,
-            IOrderTypeService orderTypeService,
+            IUserRepository userRepository,
+            IOrderTypeRepository orderTypeRepository,
             IMapper mapper, 
             ValidationResult validationResult)
         {
             _orderRepository = orderRepository;
-            _userService = userService;
-            _orderTypeService = orderTypeService;
+            _userRepository = userRepository;
+            _orderTypeRepository = orderTypeRepository;
             _mapper = mapper;
             _validationResult = validationResult;
         }
@@ -39,18 +38,21 @@ namespace Bono.Orders.Application.Services
         public ValidationResult Post(OrderViewModel OrderViewModel)
         {
             if (OrderViewModel.Id != Guid.Empty)
-                _validationResult.Add("ID must be empty");
+                _validationResult.Add("OrderID must be empty");
+
+            if (string.IsNullOrEmpty(OrderViewModel.OrderTypeId) || string.IsNullOrEmpty(OrderViewModel.UserId) || string.IsNullOrEmpty(OrderViewModel.Customername))
+            {
+                _validationResult.Add("The sent object was empty.");
+                return _validationResult;
+            }
 
             Validator.ValidateObject(OrderViewModel, new ValidationContext(OrderViewModel), true);
 
-            Order Order = _mapper.Map<Order>(OrderViewModel);
+            OrderType orderType = _orderTypeRepository.Find(new Guid(OrderViewModel.OrderTypeId));
+            User user = _userRepository.Find(new Guid(OrderViewModel.UserId));
+            Order Order = new(orderType, OrderViewModel.Customername, user);
             
             _validationResult.Entity = _orderRepository.Create(Order);
-
-            if (_validationResult.Entity == null)
-            {
-                _validationResult.Add("The Entity you are trying to record is null, please try again!");
-            }
             
             return _validationResult;
             
@@ -59,22 +61,25 @@ namespace Bono.Orders.Application.Services
         public ValidationResult Put(OrderViewModel OrderViewModel)
         {
             if (OrderViewModel.Id == Guid.Empty)
-                _validationResult.Add("ID is invalid");
+                _validationResult.Add("OrderID is not valid");
 
             Order Order = _orderRepository.Find(x => x.Id == OrderViewModel.Id && !x.IsDeleted);
             if (Order == null)
                 _validationResult.Add("Order not found");
 
-            Order = _mapper.Map<Order>(OrderViewModel);
+            if (!_validationResult.Errors.Any())
+            {
+                Order = _mapper.Map<Order>(OrderViewModel);
 
-            try
-            {
-                _orderRepository.Update(Order);
-            }
-            catch (Exception ex)
-            {
-                _validationResult.Add(ex.Message);
-            }
+                try
+                {
+                    _orderRepository.Update(Order);
+                }
+                catch (Exception ex)
+                {
+                    _validationResult.Add(ex.Message);
+                }
+            }            
 
             return _validationResult;
         }
@@ -82,12 +87,12 @@ namespace Bono.Orders.Application.Services
         public ValidationResult Delete(string id)
         {
             if (!Guid.TryParse(id, out Guid OrderId))
-                _validationResult.Add("ID is not valid");
+                _validationResult.Add("OrderID is not valid");
 
             Order _Order = _orderRepository.Find(x => x.Id == OrderId && !x.IsDeleted);
 
             if (_Order == null)
-                throw new Exception("Order not found");
+                _validationResult.Add("Order not found");
 
             try
             {
@@ -115,7 +120,7 @@ namespace Bono.Orders.Application.Services
         public OrderViewModel GetById(string id)
         {
             if (!Guid.TryParse(id, out Guid OrderId))
-                throw new Exception("ID is not valid");
+                throw new Exception("OrderID is not valid");
 
             Order _Order = _orderRepository.Find(x => x.Id == OrderId && !x.IsDeleted);
             

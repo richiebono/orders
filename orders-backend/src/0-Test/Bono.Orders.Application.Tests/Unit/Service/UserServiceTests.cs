@@ -14,7 +14,7 @@ using ValidationResult = Bono.Orders.Domain.Validations.ValidationResult;
 using System.Linq;
 using Bono.Orders.Infrastructure.Utils;
 
-namespace Bono.Orders.Application.Tests.Services
+namespace Bono.Orders.Application.Tests.Unit.Services
 {
     public class UserServiceTests
     {
