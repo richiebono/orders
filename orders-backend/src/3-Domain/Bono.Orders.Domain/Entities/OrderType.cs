@@ -16,6 +16,6 @@ namespace Bono.Orders.Domain.Entities
             this.IsDeleted = false;            
         }
         
-        public string Type { get; set; }
+        public string Type { get; private set; }
     }
 }
