@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Bono.Orders.Application.Tests": {
+      "commandName": "Project"
+    }
+  }
+}

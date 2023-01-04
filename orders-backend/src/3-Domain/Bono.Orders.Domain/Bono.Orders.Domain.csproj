@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\4-Infrastructure\Bono.Orders.Infrastructure.Utils\Bono.Orders.Infrastructure.Utils.csproj" />
+  </ItemGroup>
+
+</Project>
