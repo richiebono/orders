@@ -76,23 +76,16 @@ namespace Bono.Orders.Application.Tests.Unit.Services
         [Fact]
         public void GetValidatingObject()
         {
-            //Criando a lista com um objeto para que seja retornado pelo repository
             List<User> users = new()
             {
                 new User("Richard Bono", "admin@123", "Richard Bono", "Oliveira", "123.456.456-56", "richiebono@gmail.com", "+55 11-98547-3851")
             };
-            //Criando um objeto mock do UserRepository e configurando para retornar a lista criada anteriormente se chamar o méOrder GetAll()
             var userRepository = new Mock<IUserRepository>();
             userRepository.Setup(x => x.GetAll()).Returns(users);
-            //Criando um objeto mock do AutoMapper para que possamos converter o retorno para o tipo List<UserViewModel>()
             var autoMapperProfile = new AutoMapperSetup();
             var configuration = new MapperConfiguration(x => x.AddProfile(autoMapperProfile));
-            IMapper mapper = new Mapper(configuration);
-            //Istanciando nossa classe de serviço novamente com os novos objetos mocks que criamos
-            
-            //Obtendo os valores do méOrder Get para validar se vai retornar o objeto criado acima.
+            IMapper mapper = new Mapper(configuration);            
             var result = userRepository.Object.GetAll();
-            //Validando se o retorno contém uma lista com objetos.
             Assert.True(result.Any());
         }
 
