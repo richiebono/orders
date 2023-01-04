@@ -37,7 +37,7 @@ jobs:
       DOCKER_REPOSITORY: richiebono
       IMAGE_NAME: bono-orders-api
       IMAGE_TAG: ${{github.run_number}}
-      WORKING_DIRECTORY: ./orders-backend/src/
+      WORKING_DIRECTORY: .
                          
     defaults:
       run:
@@ -61,7 +61,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     
     - name: Build Docker Image ${{ env.IMAGE_NAME }}
-      run: docker build -t ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -t ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}:latest ./1-Api/Bono.Orders.Api/
+      run: docker build -t docker build -f orders-backend/src/1-Api/Bono.Orders.Api/Dockerfile -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -t ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}:latest ./orders-backend/src/
       
     - name: Push Docker Image ${{ env.IMAGE_NAME }}
       run: docker push ${{ env.DOCKER_REPOSITORY }}/${{ env.IMAGE_NAME }}
