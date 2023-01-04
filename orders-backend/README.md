@@ -46,4 +46,8 @@ After running, you can stop the Docker container with
 http://localhost:8080/api/swagger
 ```
 
+## Contact:
 
+```
+https://www.linkedin.com/in/richard-bono-75418818/
+```
