@@ -85,7 +85,7 @@ const config = {
       }
     ],
     historyApiFallback: true,
-    port: 8081
+    port: process.env.APP_PORT || 80,
   },
   externals: {
     react: 'React',
