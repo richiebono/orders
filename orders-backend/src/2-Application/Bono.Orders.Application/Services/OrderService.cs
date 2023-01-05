@@ -40,7 +40,7 @@ namespace Bono.Orders.Application.Services
             if (OrderViewModel.Id != Guid.Empty)
                 _validationResult.Add("OrderID must be empty");
 
-            if (string.IsNullOrEmpty(OrderViewModel.OrderTypeId) || string.IsNullOrEmpty(OrderViewModel.UserId) || string.IsNullOrEmpty(OrderViewModel.Customername))
+            if (string.IsNullOrEmpty(OrderViewModel.OrderTypeId) || string.IsNullOrEmpty(OrderViewModel.UserId) || string.IsNullOrEmpty(OrderViewModel.CustomerName))
             {
                 _validationResult.Add("The sent object was empty.");
                 return _validationResult;
@@ -50,7 +50,7 @@ namespace Bono.Orders.Application.Services
 
             OrderType orderType = _orderTypeRepository.Find(new Guid(OrderViewModel.OrderTypeId));
             User user = _userRepository.Find(new Guid(OrderViewModel.UserId));
-            Order Order = new(orderType, OrderViewModel.Customername, user);
+            Order Order = new(orderType, OrderViewModel.CustomerName, user);
             
             _validationResult.Entity = _orderRepository.Create(Order);
             
@@ -137,6 +137,23 @@ namespace Bono.Orders.Application.Services
             List<OrderViewModel> _OrderViewModels = _mapper.Map<List<OrderViewModel>>(Orders);
 
             return _OrderViewModels;
+        }
+        
+        public IEnumerable<OrderViewModel> Filter(OrderFilterViewModel filters)
+        {
+            var Orders = new List<Order>();
+
+            if (filters.order != null && filters.order.ToLower() == "desc")
+            {
+                Orders = _orderRepository.Query(x => (filters.filter == null || x.CustomerName.Contains(filters.filter)) && !x.IsDeleted).OrderByDescending(x => x.CustomerName).ToList();
+            }
+            else
+            {
+                Orders = _orderRepository.Query(x => (filters.filter == null || x.CustomerName.Contains(filters.filter)) && !x.IsDeleted).OrderBy(x => x.CustomerName).ToList();
+            }
+
+            List<OrderViewModel> _OrderViewModels = _mapper.Map<List<OrderViewModel>>(Orders);
+            return _OrderViewModels.Skip(filters.start).Take(filters.size);
         }
     }
 }

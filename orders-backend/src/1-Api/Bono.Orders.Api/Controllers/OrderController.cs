@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace Bono.Orders.Api.Controllers
 {
@@ -22,11 +24,13 @@ namespace Bono.Orders.Api.Controllers
             this.OrderService = OrderService;
         }
 
-        [HttpGet]
-        public IActionResult Get()
-        {
-            Console.WriteLine("Get");
-            return Ok(this.OrderService.GetAll());
+        [HttpGet("orders")]
+        public IActionResult Get([FromQuery] OrderFilterViewModel filter)
+        {           
+            var orders = this.OrderService.Filter(filter);
+            HttpContext.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Range");
+            HttpContext.Response.Headers.Add("Content-Range", "orders " + filter.start + "-" + filter.size + "/" + orders.Count()); 
+            return Ok(orders);
         }
 
         [HttpGet("GetAll/{userId}")]

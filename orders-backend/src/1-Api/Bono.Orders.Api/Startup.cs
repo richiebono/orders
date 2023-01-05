@@ -17,7 +17,6 @@ namespace Bono.Orders.Api
     public class Startup
     {
         public IConfiguration Configuration { get; }
-
         public Startup(IConfiguration config)
         {
             Configuration = config;
@@ -27,6 +26,17 @@ namespace Bono.Orders.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                                        .AllowAnyMethod()
+                                        .AllowAnyHeader();
+                    });
+            });
 
             services.AddControllersWithViews();
             services.AddJwtConfiguration();
@@ -41,7 +51,8 @@ namespace Bono.Orders.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Console.WriteLine("Env: " + env);
+            app.UseCors();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
