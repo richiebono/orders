@@ -24,17 +24,16 @@ services:
     depends_on:    
       - bono-orders-infrastructure-sql-data  
   
-  # bono-orders-test:
-  #   image: bono-orders-test
-  #   container_name: bono-orders-test
-  #   build:
-  #     context: ./orders-backend/src/
-  #     dockerfile: 0-Test/Bono.Orders.Application.Tests/Dockerfile    
-  #   ports:
-  #     - "8081:80"
-  #   depends_on:
-  #     - bono-orders-infrastructure-sql-data
-  #     - bono-orders-api-task-Order      
-
+  bono-orders-frontend:
+    image: bono-orders-frontend
+    container_name: bono-orders-frontend
+    build:
+      context: ./orders-frontend/
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - bono-orders-api
+  
 volumes:
   mssql-server-linux-data:

@@ -3,6 +3,7 @@ using Bono.Orders.Application.ViewModels;
 using Bono.Orders.Infrastructure.Auth.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,7 +12,7 @@ namespace Bono.Orders.Api.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
-    [ApiController]    
+    [ApiController]
     public class UsersController : ControllerBase
     {
 
@@ -29,7 +30,7 @@ namespace Bono.Orders.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost]        
+        [HttpPost]
         public IActionResult Post(UserViewModel userViewModel)
         {
             if (!ModelState.IsValid)
@@ -60,17 +61,26 @@ namespace Bono.Orders.Api.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate(UserAuthenticateRequestViewModel userViewModel)
         {
-            if (ModelState.IsValid)
+            // var userViewModel = new UserAuthenticateRequestViewModel
+            // {
+            //     Email = username,
+            //     Password = password
+            // };
+
+            try
             {
                 var result = this.userService.Authenticate(userViewModel);
 
                 if (result.IsValid)
                 {
-                    return Ok(result.Entity);                   
+                    return Ok(result.Entity);
                 }
-                return Unauthorized(result); //401
+                return Unauthorized(result);
             }
-            return BadRequest(); //400            
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

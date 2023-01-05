@@ -7,6 +7,10 @@ namespace Bono.Orders.Domain.Entities
 {
     public class OrderType : Entity
     {
+        public OrderType()
+        {
+        }
+
         public OrderType(string type)
         {
             this.Id = Guid.NewGuid();
@@ -16,6 +20,6 @@ namespace Bono.Orders.Domain.Entities
             this.IsDeleted = false;            
         }
         
-        public string Type { get; private set; }
+        public string Type { get; set; }
     }
 }

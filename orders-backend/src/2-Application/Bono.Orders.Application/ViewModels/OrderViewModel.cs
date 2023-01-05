@@ -8,7 +8,7 @@ namespace Bono.Orders.Application.ViewModels
     {        
         [Required]
         
-        public string Customername { get; set; }
+        public string CustomerName { get; set; }
         
         public string OrderTypeId { get; set; }
         
