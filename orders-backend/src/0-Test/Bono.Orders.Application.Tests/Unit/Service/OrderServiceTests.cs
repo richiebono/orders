@@ -59,7 +59,7 @@ namespace Bono.Orders.Application.Tests.Unit.Services
         [Fact]
         public void PostSendingValidObject()
         {
-            var result = OrderService.Post(new OrderViewModel { Customername = "Richie Bono", UserId = Guid.NewGuid().ToString(), OrderTypeId = Guid.NewGuid().ToString() });
+            var result = OrderService.Post(new OrderViewModel { CustomerName = "Richie Bono", UserId = Guid.NewGuid().ToString(), OrderTypeId = Guid.NewGuid().ToString() });
             Assert.True(result.IsValid);
         }
 
