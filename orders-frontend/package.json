@@ -9,8 +9,7 @@
     "build:server": "docker-compose build & docker run --name $npm_package_name -p 80:80 -d $npm_package_name\\_nginx",
     "test": "jest",
     "test:coverage": "jest --coverage --watchAll=false",
-    "test:watch": "jest --watch",
-    "prepare": "cd .. && husky install orders-frontend/.husky"
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@babel/core": "^7.20.5",
@@ -84,8 +83,7 @@
     "jest": "^29.3.1",
     "jest-styled-components": "^7.1.1",
     "react-test-renderer": "^18.2.0",
-    "ts-jest": "^29.0.3",
-    "husky": "^8.0.3"
+    "ts-jest": "^29.0.3"
   },
   "jest": {
     "collectCoverageFrom": [
