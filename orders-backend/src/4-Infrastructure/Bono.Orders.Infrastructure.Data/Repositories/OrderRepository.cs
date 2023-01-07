@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Bono.Orders.Data.Context;
 using Bono.Orders.Domain.Entities;
 using Bono.Orders.Domain.Interfaces.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bono.Orders.Data.Repositories
 {
@@ -17,5 +20,9 @@ namespace Bono.Orders.Data.Repositories
             return Query(x => !x.IsDeleted);
         }
 
+        public IQueryable<Order> Query(Expression<Func<Order, bool>> where)
+        {
+            return _context.Order.Include(x=> x.User).Include(x=> x.Type).Where(where);          
+        }
     }
 }

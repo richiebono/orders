@@ -24,16 +24,16 @@ services:
     depends_on:    
       - bono-orders-infrastructure-sql-data  
   
-  bono-orders-frontend:
-    image: bono-orders-frontend
-    container_name: bono-orders-frontend
-    build:
-      context: ./orders-frontend/
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - bono-orders-api
+  # bono-orders-frontend:
+  #   image: bono-orders-frontend
+  #   container_name: bono-orders-frontend
+  #   build:
+  #     context: ./orders-frontend/
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - bono-orders-api
   
 volumes:
   mssql-server-linux-data:

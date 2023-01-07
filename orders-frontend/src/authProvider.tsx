@@ -2,7 +2,7 @@ export default {
 
     login: ({ username, password }: any) => {
         
-        const request = new Request(`${ process.env.URL_API }Users/authenticate/`, {
+        const request = new Request(`${ process.env.URL_API }/Users/authenticate/`, {
             method: 'POST',
             body: JSON.stringify({ email: username, password }),
             headers: new Headers({ 'Content-Type': 'application/json; charset=utf-8' }),

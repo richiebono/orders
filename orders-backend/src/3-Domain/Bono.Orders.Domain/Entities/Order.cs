@@ -10,7 +10,7 @@ namespace Bono.Orders.Domain.Entities
         public OrderType Type { get; set; }
         public string CustomerName { get; set; }
         public User User { get; set; }
-        
+
         public Order()
         {            
         }

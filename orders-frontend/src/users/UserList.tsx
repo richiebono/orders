@@ -25,7 +25,7 @@ const getUserFilters = permissions =>
         permissions === 'admin' ? <TextInput source="role" /> : null,
     ].filter(filter => filter !== null);
 
-const UserBulkActionButtons = props => (
+const UserBulkActionButtons = (props: SelectInputProps) => (
     <BulkDeleteWithConfirmButton {...props} />
 );
 

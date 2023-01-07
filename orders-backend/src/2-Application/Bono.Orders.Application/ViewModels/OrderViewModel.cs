@@ -10,9 +10,11 @@ namespace Bono.Orders.Application.ViewModels
         
         public string CustomerName { get; set; }
         
+        public string OrderTypeName { get; set; }
+
         public string OrderTypeId { get; set; }
         
         public string UserId { get; set; }
-        
+        public string UserName { get; internal set; }
     }
 }

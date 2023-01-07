@@ -24,7 +24,7 @@ import Aside from './Aside';
  *
  * Save with undo, but delete with confirm
  */
-const UserEditToolbar = props => {
+const UserEditToolbar = (props: SelectInputProps) => {
     return (
         <Toolbar
             sx={{ display: 'flex', justifyContent: 'space-between' }}

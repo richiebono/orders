@@ -44,9 +44,9 @@ namespace Bono.Orders.Application.Services
 
             Role Role = mapper.Map<Role>(RoleViewModel);
             
-            validationResult.Entity = this.RoleRepository.Create(Role);
+            validationResult.Data = this.RoleRepository.Create(Role);
 
-            if (validationResult.Entity == null)
+            if (validationResult.Data == null)
             {
                 validationResult.Add("The Entity you are trying to record is null, please try again!");
             }

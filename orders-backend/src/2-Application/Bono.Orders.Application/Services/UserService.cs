@@ -58,7 +58,7 @@ namespace Bono.Orders.Application.Services
             User user = new(userViewModel.UserName, userViewModel.Password, userViewModel.FirstName, userViewModel.LastName, userViewModel.Cpf, userViewModel.Email, userViewModel.PhoneNumber);
             user.SetPassword(security.EncryptPassword(userViewModel.Password));
 
-            validationResult.Entity = this.userRepository.Create(user);
+            validationResult.Data = this.userRepository.Create(user);
 
             //if (validationResult.Entity == null)
             //{
@@ -163,7 +163,7 @@ namespace Bono.Orders.Application.Services
             
 
             if (validationResult.IsValid)
-                validationResult.Entity = new UserAuthenticateResponseViewModel(mapper.Map<UserViewModel>(_user), TokenService.GenerateToken(_user));
+                validationResult.Data = new UserAuthenticateResponseViewModel(mapper.Map<UserViewModel>(_user), TokenService.GenerateToken(_user));
 
 
             return validationResult;

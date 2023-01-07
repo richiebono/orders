@@ -31,7 +31,6 @@ import {
     useTranslate,
 } from 'react-admin'; // eslint-disable-line import/no-unresolved
 
-import ResetViewsButton from './ResetViewsButton';
 export const OrderIcon = BookIcon;
 
 const QuickFilter = ({ label, source, defaultValue }: any) => {
@@ -48,12 +47,9 @@ const orderFilter = [
     />,
 ];
 
-const exporter = orders => {
-    const data = orders.map(order => ({
+const exporter = (orders: any) => {
+    const data = orders.map(({order}: any) => ({
         ...order,
-        backlinks: lodashGet(order, 'backlinks', []).map(
-            backlink => backlink.url
-        ),
     }));
     return jsonExport(data, (err: any, csv: any) => downloadCSV(csv, 'orders'));
 };
@@ -78,7 +74,6 @@ const StyledDatagrid = styled(DatagridConfigurable)(({ theme }) => ({
 
 const OrderListBulkActions = memo(({ children, ...props }: any) => (
     <Fragment>
-        <ResetViewsButton {...props} />
         <BulkDeleteButton {...props} />
         <BulkExportButton {...props} />
     </Fragment>
@@ -97,15 +92,15 @@ const OrderListActionToolbar = ({ children, ...props }: any) => (
     <Box sx={{ alignItems: 'center', display: 'flex' }}>{children}</Box>
 );
 
-const rowClick = (id, resource, record) => {
-    if (record.customerName) {
+const rowClick = ({id, resource, record}: any) => {
+    if (id) {
         return 'edit';
     }
 
     return 'show';
 };
 
-const OrderPanel = ({ id, record, resource }) => (
+const OrderPanel = ({ id, record, resource }: any) => (
     <div dangerouslySetInnerHTML={{ __html: record.body }} />
 );
 
@@ -133,9 +128,16 @@ const OrderList = () => {
                     expand={OrderPanel}                    
                 >
                     <TextField source="id" />
+                    <TextField source="orderTypeName" cellClassName="title" />
                     <TextField source="customerName" cellClassName="title" />
+                    <TextField source="userName" cellClassName="title" />
                     <DateField
                         source="dateCreated"
+                        sortByOrder="DESC"
+                        cellClassName="publishedAt"
+                    />
+                    <DateField
+                        source="dateUpdated"
                         sortByOrder="DESC"
                         cellClassName="publishedAt"
                     />

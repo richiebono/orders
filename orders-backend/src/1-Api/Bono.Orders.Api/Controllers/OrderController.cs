@@ -1,18 +1,18 @@
-﻿using Bono.Orders.Application.Interfaces;
+﻿using Bono.Orders.Api.Filters;
+using Bono.Orders.Application.Interfaces;
 using Bono.Orders.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Security.Claims;
 
 namespace Bono.Orders.Api.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrderController : BaseController
     {
 
         private readonly IOrderService OrderService;
@@ -22,13 +22,12 @@ namespace Bono.Orders.Api.Controllers
             this.OrderService = OrderService;
         }
 
-        [HttpGet("orders")]
-        public IActionResult Get([FromQuery] OrderFilterViewModel filter)
-        {           
-            var orders = this.OrderService.Filter(filter);
-            HttpContext.Response.Headers.Add("Access-Control-Expose-Headers", "Content-Range");
-            HttpContext.Response.Headers.Add("Content-Range", "orders " + filter.start + "-" + filter.size + "/" + orders.Count()); 
-            return Ok(orders);
+        [HttpGet]
+        [ResponseHeader("Access-Control-Expose-Headers", "Content-Range")]
+        public IActionResult Get([FromQuery] FilterViewModel filterRequest)
+        {
+            var orders = this.OrderService.Filter(filterRequest);
+            return OkFilter(orders, "orders", filterRequest.start, filterRequest.size, this.OrderService.Count(filterRequest));
         }
 
         [HttpGet("GetAll/{userId}")]
@@ -40,10 +39,20 @@ namespace Bono.Orders.Api.Controllers
         [HttpPost]
         public IActionResult Post(OrderViewModel OrderViewModelViewModel)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            return Ok(this.OrderService.Post(OrderViewModelViewModel));
+            try
+            {
+                OrderViewModelViewModel.UserId = UserId();
+                var result = this.OrderService.Post(OrderViewModelViewModel);
+                
+                if (result.Errors.Any())
+                    return BadRequest(result);
+                
+                return Ok(this.OrderService.Post(OrderViewModelViewModel).Data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
@@ -52,18 +61,29 @@ namespace Bono.Orders.Api.Controllers
             return Ok(this.OrderService.GetById(id));
         }
 
-        [HttpPut]
-        public IActionResult Put(OrderViewModel OrderViewModelViewModel)
+        [HttpPut("{id}")]
+        public IActionResult Put(OrderViewModel OrderViewModelViewModel, string id)
         {
-            return Ok(this.OrderService.Put(OrderViewModelViewModel));
+            try
+            {
+                var result = this.OrderService.Put(OrderViewModelViewModel);
+                
+                if (result.Errors.Any())
+                    return BadRequest(result);
+
+                return Ok(result.Data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpDelete]
-        public IActionResult Delete(string OrderViewModelId)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(string id)
         {
-            return Ok(this.OrderService.Delete(OrderViewModelId));
+            return Ok(this.OrderService.Delete(id));
         }
 
-        
     }
 }

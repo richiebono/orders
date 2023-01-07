@@ -17,7 +17,7 @@ namespace Bono.Orders.Application.Services
     {
 
         private readonly IOrderRepository _orderRepository;
-        private readonly IUserRepository _userRepository;        
+        private readonly IUserRepository _userRepository;
         private readonly IOrderTypeRepository _orderTypeRepository;
         private readonly IMapper _mapper;
         private readonly ValidationResult _validationResult;
@@ -25,7 +25,7 @@ namespace Bono.Orders.Application.Services
         public OrderService(IOrderRepository orderRepository,
             IUserRepository userRepository,
             IOrderTypeRepository orderTypeRepository,
-            IMapper mapper, 
+            IMapper mapper,
             ValidationResult validationResult)
         {
             _orderRepository = orderRepository;
@@ -51,11 +51,11 @@ namespace Bono.Orders.Application.Services
             OrderType orderType = _orderTypeRepository.Find(new Guid(OrderViewModel.OrderTypeId));
             User user = _userRepository.Find(new Guid(OrderViewModel.UserId));
             Order Order = new(orderType, OrderViewModel.CustomerName, user);
-            
-            _validationResult.Entity = _orderRepository.Create(Order);
-            
+
+            _validationResult.Data = _orderRepository.Create(Order);
+
             return _validationResult;
-            
+
         }
 
         public ValidationResult Put(OrderViewModel OrderViewModel)
@@ -69,6 +69,7 @@ namespace Bono.Orders.Application.Services
 
             if (!_validationResult.Errors.Any())
             {
+                OrderViewModel.DateUpdated = DateTime.Now;
                 Order = _mapper.Map<Order>(OrderViewModel);
 
                 try
@@ -79,7 +80,7 @@ namespace Bono.Orders.Application.Services
                 {
                     _validationResult.Add(ex.Message);
                 }
-            }            
+            }
 
             return _validationResult;
         }
@@ -107,7 +108,7 @@ namespace Bono.Orders.Application.Services
 
 
         }
-        
+
         public IEnumerable<OrderViewModel> GetAll()
         {
             var Orders = _orderRepository.GetAll();
@@ -123,7 +124,7 @@ namespace Bono.Orders.Application.Services
                 throw new Exception("OrderID is not valid");
 
             Order _Order = _orderRepository.Find(x => x.Id == OrderId && !x.IsDeleted);
-            
+
             return _mapper.Map<OrderViewModel>(_Order);
         }
 
@@ -131,29 +132,80 @@ namespace Bono.Orders.Application.Services
         {
             if (!Guid.TryParse(userId, out Guid UserId))
                 throw new Exception("User is not valid");
-            
-            var Orders = _orderRepository.Query(x=> x.User.Id == UserId && !x.IsDeleted);
+
+            var Orders = _orderRepository.Query(x => x.User.Id == UserId && !x.IsDeleted);
 
             List<OrderViewModel> _OrderViewModels = _mapper.Map<List<OrderViewModel>>(Orders);
 
             return _OrderViewModels;
         }
-        
-        public IEnumerable<OrderViewModel> Filter(OrderFilterViewModel filters)
-        {
-            var Orders = new List<Order>();
 
-            if (filters.order != null && filters.order.ToLower() == "desc")
+        public IEnumerable<OrderViewModel> Filter(FilterViewModel filter)
+        {
+            var orders = new List<Order>();
+
+            if (!string.IsNullOrEmpty(filter.filter))
             {
-                Orders = _orderRepository.Query(x => (filters.filter == null || x.CustomerName.Contains(filters.filter)) && !x.IsDeleted).OrderByDescending(x => x.CustomerName).ToList();
+                orders = _orderRepository.Query(x => x.CustomerName.Contains(filter.filter) || x.CustomerName == filter.filter).ToList();
             }
             else
             {
-                Orders = _orderRepository.Query(x => (filters.filter == null || x.CustomerName.Contains(filters.filter)) && !x.IsDeleted).OrderBy(x => x.CustomerName).ToList();
+                orders = _orderRepository.Query(x => !x.IsDeleted).ToList();
+            }
+            
+            List<OrderViewModel> orderViewModels = orders.Select(x => new OrderViewModel
+            {
+                Id = x.Id,
+                CustomerName = x.CustomerName,
+                DateCreated = x.DateCreated,
+                DateUpdated = x.DateUpdated,
+                OrderTypeName = x.Type.Type,
+                UserName = x.User.UserName,
+                OrderTypeId = x.Type.Id.ToString(),
+                UserId = x.User.Id.ToString()
+            }).ToList();
+
+            if (!string.IsNullOrEmpty(filter.order) && filter.order.ToLower() == "desc")
+            {
+                if (filter.order == "id")
+                    orderViewModels = orderViewModels.OrderByDescending(x => x.Id).ToList();
+
+                if (filter.order == "customerName")
+                    orderViewModels = orderViewModels.OrderByDescending(x => x.CustomerName).ToList();
+
+                if (filter.order == "dataCreated")
+                    orderViewModels = orderViewModels.OrderByDescending(x => x.DateCreated).ToList();
+
+                if (filter.order == "dateUpdated")
+                    orderViewModels = orderViewModels.OrderByDescending(x => x.DateUpdated).ToList();
+
+                if (filter.order == "orderTypeName")
+                    orderViewModels = orderViewModels.OrderByDescending(x => x.OrderTypeName).ToList();
+            }
+            else
+            {
+                if (filter.order == "id")
+                    orderViewModels = orderViewModels.OrderBy(x => x.Id).ToList();
+
+                if (filter.order == "customerName")
+                    orderViewModels = orderViewModels.OrderBy(x => x.CustomerName).ToList();
+
+                if (filter.order == "dateCreated")
+                    orderViewModels = orderViewModels.OrderBy(x => x.DateCreated).ToList();
+
+                if (filter.order == "dateUpdated")
+                    orderViewModels = orderViewModels.OrderBy(x => x.DateUpdated).ToList();
+
+                if (filter.order == "orderTypeName")
+                    orderViewModels = orderViewModels.OrderBy(x => x.OrderTypeName).ToList();
             }
 
-            List<OrderViewModel> _OrderViewModels = _mapper.Map<List<OrderViewModel>>(Orders);
-            return _OrderViewModels.Skip(filters.start).Take(filters.size);
+            return orderViewModels.Skip(filter.start).Take(filter.size).ToList();
+        }
+
+        public int Count(FilterViewModel filter)
+        {
+            return _orderRepository.Query(x => (filter.filter == null || x.CustomerName.Contains(filter.filter)) && !x.IsDeleted).OrderBy(x => x.CustomerName).Count();
         }
     }
 }

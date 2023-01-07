@@ -7,7 +7,7 @@ export default () => {
     return (
         <>
             {record
-                ? translate('order.edit.title', { title: record.title })
+                ? translate('order.edit.title', { title: record.customerName + ' ' + record.ordertTypeName })
                 : ''}
         </>
     );

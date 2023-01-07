@@ -8,7 +8,8 @@ namespace Bono.Orders.Application.Interfaces
 {
     public interface IOrderService : IService<OrderViewModel>
     {
-        IEnumerable<OrderViewModel> Filter(OrderFilterViewModel filters);
+        int Count(FilterViewModel filter);
+        IEnumerable<OrderViewModel> Filter(FilterViewModel filter);
         IEnumerable<OrderViewModel> GetAll(string userId);        
     }
 }

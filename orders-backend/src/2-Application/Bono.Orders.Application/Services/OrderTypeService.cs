@@ -7,6 +7,7 @@ using Bono.Orders.Application.ViewModels;
 using Bono.Orders.Domain.Entities;
 using ValidationResult = Bono.Orders.Domain.Validations.ValidationResult;
 using Bono.Orders.Domain.Interfaces.Repository;
+using System.Linq;
 
 namespace Bono.Orders.Application.Services
 {
@@ -42,6 +43,38 @@ namespace Bono.Orders.Application.Services
                 throw new Exception("OrderType not found");
 
             return _mapper.Map<OrderTypeViewModel>(_OrderType);
+        }
+
+        public IEnumerable<OrderTypeViewModel> Filter(FilterViewModel filter)
+        {
+            var orders = new List<OrderType>();
+
+            if (!string.IsNullOrEmpty(filter.filter))
+            {
+                orders = _orderTypeRepository.Query(x => x.Type.Contains(filter.filter) || x.Type == filter.filter).ToList();
+            }
+            else
+            {
+                orders = _orderTypeRepository.Query(x => !x.IsDeleted).ToList();
+            }
+
+            List<OrderTypeViewModel> orderTypeViewModels = _mapper.Map<List<OrderTypeViewModel>>(orders);
+            
+            if (!string.IsNullOrEmpty(filter.order) && filter.order.ToLower() == "desc")
+            {
+                orderTypeViewModels = orderTypeViewModels.OrderByDescending(x => x.Type).ToList();
+            }
+            else
+            {
+                orderTypeViewModels = orderTypeViewModels.OrderBy(x => x.Type).ToList();
+            }
+
+            return orderTypeViewModels.Skip(filter.start).Take(filter.size).ToList();
+        }
+
+        public int Count(FilterViewModel filter)
+        {
+            return _orderTypeRepository.Query(x => (filter.filter == null || x.Type.Contains(filter.filter)) && !x.IsDeleted).Count();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Bono.Orders.Application.ViewModels
 {
-    public class OrderFilterViewModel
+    public class FilterViewModel
     {        
         public string sort { get; set; }
         public string order { get; set; }

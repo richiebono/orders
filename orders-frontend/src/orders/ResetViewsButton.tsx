@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useUpdateMany, useNotify, useUnselectAll, Button } from 'react-admin';
 
-const ResetViewsButton = ({ resource, selectedIds }) => {
+const ResetViewsButton = ({ resource, selectedIds }: any) => {
     const notify = useNotify();
     const unselectAll = useUnselectAll(resource);
     const [updateMany, { isLoading }] = useUpdateMany(
