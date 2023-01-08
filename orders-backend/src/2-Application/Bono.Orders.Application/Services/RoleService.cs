@@ -80,7 +80,7 @@ namespace Bono.Orders.Application.Services
             
             try
             {
-                this.RoleRepository.Update(Role);
+                this.RoleRepository.Update(Role, x => x.Id == Role.Id);
             }
             catch (Exception ex)
             {

@@ -104,7 +104,7 @@ namespace Bono.Orders.Application.Services
 
             try
             {
-                this.userRepository.Update(user);
+                this.userRepository.Update(user, x=> x.Id == user.Id);
             }
             catch (Exception ex)
             {

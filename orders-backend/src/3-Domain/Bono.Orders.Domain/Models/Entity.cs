@@ -6,9 +6,9 @@ namespace Bono.Orders.Domain.Models
 {
     public class Entity
     {
-        public Guid Id { get; protected set; }
-        public DateTime DateCreated { get; protected set; }
-        public DateTime? DateUpdated { get; protected set; }
+        public Guid Id { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime? DateUpdated { get; set; }
         public bool IsDeleted { get; protected set; }
 
         public void SetDeleted(bool IsDeleted)

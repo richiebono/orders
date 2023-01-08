@@ -49,9 +49,9 @@ namespace Bono.Orders.Application.Services
         {
             var orders = new List<OrderType>();
 
-            if (!string.IsNullOrEmpty(filter.filter))
+            if (!string.IsNullOrEmpty(filter.search))
             {
-                orders = _orderTypeRepository.Query(x => x.Type.Contains(filter.filter) || x.Type == filter.filter).ToList();
+                orders = _orderTypeRepository.Query(x => x.Type.Contains(filter.search) || x.Type == filter.search).ToList();
             }
             else
             {
@@ -74,7 +74,7 @@ namespace Bono.Orders.Application.Services
 
         public int Count(FilterViewModel filter)
         {
-            return _orderTypeRepository.Query(x => (filter.filter == null || x.Type.Contains(filter.filter)) && !x.IsDeleted).Count();
+            return _orderTypeRepository.Query(x => (filter.search == null || x.Type.Contains(filter.search)) && !x.IsDeleted).Count();
         }
     }
 }

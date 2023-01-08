@@ -14,6 +14,10 @@ namespace Bono.Orders.Data.Context
         private readonly Settings settings;
         private readonly Security security;
 
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Order> Order { get; set; }
+        public DbSet<OrderType> OrderType { get; set; }
 
         public BonoOrderContext(DbContextOptions<BonoOrderContext> option, Settings settings, Security security) : base(option) 
         {
@@ -25,20 +29,19 @@ namespace Bono.Orders.Data.Context
                 Database.Migrate();
             }
             
+
         }
 
         #region "DBSets"
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Order> Order { get; set; }
-        public DbSet<OrderType> OrderType { get; set; }
+        
 
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserMap());
+            modelBuilder.ApplyConfiguration(new OrderMap());
             modelBuilder.ApplyGlobalConfigurations();
             modelBuilder.SeedData(security);
             base.OnModelCreating(modelBuilder);

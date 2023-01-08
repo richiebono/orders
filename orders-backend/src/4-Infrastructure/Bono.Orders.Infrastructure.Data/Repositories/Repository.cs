@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Bono.Orders.Data.Context;
 using Bono.Orders.Domain.Models;
 using Bono.Orders.Domain.Interfaces.Repository;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Bono.Orders.Data.Repositories
 {
@@ -31,7 +32,7 @@ namespace Bono.Orders.Data.Repositories
         {
             _context = context;
         }
-
+        
         #region 'Methods: Create/Update/Remove/Save'
 
         public TEntity Create(TEntity model)
@@ -63,16 +64,12 @@ namespace Bono.Orders.Data.Repositories
             }
         }
 
-        public bool Update(TEntity model)
+        public bool Update(TEntity model, Expression<Func<TEntity, bool>> where)
         {
             try
             {
-                EntityEntry<TEntity> entry = NewMethod(model);
-
-                DbSet.Attach(model);
-
-                entry.State = EntityState.Modified;
-
+                var currentItem = DbSet.Where(where).FirstOrDefault();
+                _context.Entry(currentItem).CurrentValues.SetValues(model);
                 return Save() > 0;
             }
             catch (Exception)
@@ -87,15 +84,14 @@ namespace Bono.Orders.Data.Repositories
             return _context.Entry(model);
         }
 
-        public bool Update(List<TEntity> models)
+        public bool Update(List<TEntity> models, Expression<Func<TEntity, bool>> where)
         {
             try
             {
-                foreach (TEntity register in models)
+                foreach (TEntity model in models)
                 {
-                    EntityEntry<TEntity> entry = _context.Entry(register);
-                    DbSet.Attach(register);
-                    entry.State = EntityState.Modified;
+                     var currentItem = DbSet.Where(where).FirstOrDefault();
+                    _context.Entry(currentItem).CurrentValues.SetValues(model);
                 }
 
                 return Save() > 0;
@@ -289,15 +285,12 @@ namespace Bono.Orders.Data.Repositories
             }
         }
 
-        public async Task<bool> UpdateAsync(TEntity model)
+        public async Task<bool> UpdateAsync(TEntity model, Expression<Func<TEntity, bool>> where)
         {
             try
             {
-                EntityEntry<TEntity> entry = _context.Entry(model);
-
-                DbSet.Attach(model);
-
-                entry.State = EntityState.Modified;
+                var currentItem = DbSet.Where(where).FirstOrDefault();
+                _context.Entry(currentItem).CurrentValues.SetValues(model);
 
                 return await SaveAsync() > 0;
             }

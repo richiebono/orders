@@ -16,15 +16,11 @@ export const messages = {
                 id: 'Order ID',
                 customerName: 'Customer Name',
                 dateCreated: 'Create Date',
+                dateUpdated: 'Update Date',
+                orderTypeName: 'Order Type',
+                userName: 'User',
             },
-        },        
-        users: {
-            name: 'User |||| Users',
-            fields: {
-                name: 'Name',
-                role: 'Role',
-            },
-        },
+        }
     },
     order: {
         list: {
@@ -34,7 +30,7 @@ export const messages = {
             summary: 'Summary'
         },
         edit: {
-            title: 'Orders "%{customerName}"',
+            title: 'Orders',
         },
         action: {
             save_and_edit: 'Save and Edit',
@@ -42,20 +38,7 @@ export const messages = {
             save_and_show: 'Save and Show',
             save_with_average_note: 'Save with Note',
         },
-    },
-    user: {
-        list: {
-            search: 'Search',
-        },
-        form: {
-            summary: 'Summary',
-            security: 'Security',
-        },
-        action: {
-            save_and_add: 'Save and Add',
-            save_and_show: 'Save and Show',
-        },
-    },
+    }    
 };
 
 export default messages;

@@ -18,8 +18,11 @@ const httpClient = (url: any, options: any = {}) => {
         const filter = queryParams.get("filter");
         
         if(filter) {
-            const newFilter = JSON.parse(filter).customerName;
-            if(newFilter) newUrl += `filter=${newFilter}`;
+            const newFilter = JSON.parse(filter);
+            const customerName = newFilter.customerName;
+            const orderTypeId = newFilter.orderTypeId;
+            if(customerName) newUrl += `search=${customerName}`;
+            if(orderTypeId) newUrl += `type=${orderTypeId}`;
         }
         
         const sortArray = JSON.parse(queryParams.get("sort") as string);

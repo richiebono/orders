@@ -43,10 +43,10 @@ namespace Bono.Orders.Api.Controllers
             {
                 OrderViewModelViewModel.UserId = UserId();
                 var result = this.OrderService.Post(OrderViewModelViewModel);
-                
+
                 if (result.Errors.Any())
                     return BadRequest(result);
-                
+
                 return Ok(this.OrderService.Post(OrderViewModelViewModel).Data);
             }
             catch (Exception ex)
@@ -62,12 +62,13 @@ namespace Bono.Orders.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(OrderViewModel OrderViewModelViewModel, string id)
+        public IActionResult Put(string id, OrderViewModel OrderViewModelViewModel)
         {
             try
             {
+                //OrderViewModelViewModel.UserId = UserId();
                 var result = this.OrderService.Put(OrderViewModelViewModel);
-                
+
                 if (result.Errors.Any())
                     return BadRequest(result);
 

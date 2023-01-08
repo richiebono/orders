@@ -1,15 +1,11 @@
-import * as React from 'react';
 import { Fragment, memo } from 'react';
 import BookIcon from '@mui/icons-material/Book';
 import { Box, Chip, useMediaQuery } from '@mui/material';
 import { Theme, styled } from '@mui/material/styles';
-import lodashGet from 'lodash/get';
 import jsonExport from 'jsonexport/dist';
 import {
-    BooleanField,
     BulkDeleteButton,
     BulkExportButton,
-    ChipField,
     SelectColumnsButton,
     CreateButton,
     DatagridConfigurable,
@@ -19,16 +15,15 @@ import {
     ExportButton,
     FilterButton,
     List,
-    NumberField,
-    ReferenceArrayField,
     SearchInput,
     ShowButton,
     SimpleList,
-    SingleFieldList,
     TextField,
-    TextInput,
     TopToolbar,
     useTranslate,
+    ReferenceInput,
+    SelectInput,
+    required,
 } from 'react-admin'; // eslint-disable-line import/no-unresolved
 
 export const OrderIcon = BookIcon;
@@ -40,18 +35,23 @@ const QuickFilter = ({ label, source, defaultValue }: any) => {
 
 const orderFilter = [
     <SearchInput source="customerName" alwaysOn />,
+    <ReferenceInput source="orderTypeId" reference="OrderType" alwaysOn={true}>
+        <SelectInput label="resources.orders.fields.orderTypeName" source='id' optionText="type" defaultValue='2D9D8CF3-80E7-4E0A-B6A4-544B5F169DB5' emptyText="Select..." />
+    </ReferenceInput>,    
     <QuickFilter
         label="resources.orders.fields.customerName"
         source="customerName"
-        defaultValue
     />,
 ];
 
-const exporter = (orders: any) => {
-    const data = orders.map(({order}: any) => ({
-        ...order,
-    }));
-    return jsonExport(data, (err: any, csv: any) => downloadCSV(csv, 'orders'));
+const exporter = (Orders: any) => {
+    const ordersExport = Orders.map(({order}: any) => {
+        const { id, userId, orderTypeId, ...orderForExport } = order; // omit backlinks and author
+        return orderForExport;
+    });
+    console.log(ordersExport);
+    // change the rowDelimiter to change the CSV file delimiter
+    return jsonExport(ordersExport, {rowDelimiter: ';'}, (err: any, csv: any) => downloadCSV(csv, 'Order'));
 };
 
 const StyledDatagrid = styled(DatagridConfigurable)(({ theme }) => ({
@@ -100,10 +100,6 @@ const rowClick = ({id, resource, record}: any) => {
     return 'show';
 };
 
-const OrderPanel = ({ id, record, resource }: any) => (
-    <div dangerouslySetInnerHTML={{ __html: record.body }} />
-);
-
 const OrderList = () => {
     const isSmall = useMediaQuery<Theme>(theme => theme.breakpoints.down('md'));
     return (
@@ -125,18 +121,19 @@ const OrderList = () => {
                 <StyledDatagrid
                     bulkActionButtons={<OrderListBulkActions />}
                     rowClick={rowClick}
-                    expand={OrderPanel}                    
                 >
-                    <TextField source="id" />
-                    <TextField source="orderTypeName" cellClassName="title" />
-                    <TextField source="customerName" cellClassName="title" />
-                    <TextField source="userName" cellClassName="title" />
+                    <TextField label="resources.orders.fields.id" source="id" />
+                    <TextField label="resources.orders.fields.orderTypeName" source="orderTypeName" cellClassName="title" />
+                    <TextField label="resources.orders.fields.customerName" source="customerName" cellClassName="title" />
+                    <TextField label="resources.orders.fields.userName" source="userName" cellClassName="title" />
                     <DateField
+                        label="resources.orders.fields.dateCreated"
                         source="dateCreated"
                         sortByOrder="DESC"
                         cellClassName="publishedAt"
                     />
                     <DateField
+                        label="resources.orders.fields.dateUpdated"
                         source="dateUpdated"
                         sortByOrder="DESC"
                         cellClassName="publishedAt"

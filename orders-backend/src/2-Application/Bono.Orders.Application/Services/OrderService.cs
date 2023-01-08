@@ -10,6 +10,7 @@ using ValidationResult = Bono.Orders.Domain.Validations.ValidationResult;
 using Bono.Orders.Domain.Interfaces.Repository;
 using Bono.Orders.Domain.Interfaces.Business;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bono.Orders.Application.Services
 {
@@ -69,12 +70,18 @@ namespace Bono.Orders.Application.Services
 
             if (!_validationResult.Errors.Any())
             {
-                OrderViewModel.DateUpdated = DateTime.Now;
-                Order = _mapper.Map<Order>(OrderViewModel);
+                Order.CustomerName = OrderViewModel.CustomerName;
+                Order.Type = _orderTypeRepository.Find(new Guid(OrderViewModel.OrderTypeId));
+                Order.DateUpdated = DateTime.Now;
 
                 try
                 {
-                    _orderRepository.Update(Order);
+                    bool updated = _orderRepository.Update(Order, x => x.Id == Order.Id);
+
+                    if (updated)
+                        _validationResult.Data = Order;
+                    else
+                        _validationResult.Add("Order not updated");
                 }
                 catch (Exception ex)
                 {
@@ -123,9 +130,19 @@ namespace Bono.Orders.Application.Services
             if (!Guid.TryParse(id, out Guid OrderId))
                 throw new Exception("OrderID is not valid");
 
-            Order _Order = _orderRepository.Find(x => x.Id == OrderId && !x.IsDeleted);
+            Order order = _orderRepository.Find(x => x.Id == OrderId && !x.IsDeleted);
 
-            return _mapper.Map<OrderViewModel>(_Order);
+            return new OrderViewModel
+            {
+                Id = order.Id,
+                CustomerName = order.CustomerName,
+                DateCreated = order.DateCreated,
+                DateUpdated = order.DateUpdated,
+                OrderTypeName = order.Type.Type,
+                UserName = order.User.UserName,
+                OrderTypeId = order.Type.Id.ToString(),
+                UserId = order.User.Id.ToString()
+            };
         }
 
         public IEnumerable<OrderViewModel> GetAll(string userId)
@@ -144,15 +161,19 @@ namespace Bono.Orders.Application.Services
         {
             var orders = new List<Order>();
 
-            if (!string.IsNullOrEmpty(filter.filter))
-            {
-                orders = _orderRepository.Query(x => x.CustomerName.Contains(filter.filter) || x.CustomerName == filter.filter).ToList();
-            }
-            else
-            {
-                orders = _orderRepository.Query(x => !x.IsDeleted).ToList();
-            }
-            
+            orders = _orderRepository.Query(x => 
+                (
+                    string.IsNullOrEmpty(filter.search) || 
+                    x.CustomerName.Contains(filter.search) || 
+                    x.CustomerName == filter.search
+                ) && 
+                (
+                    string.IsNullOrEmpty(filter.type) || 
+                    x.Type.Id == new Guid(filter.type)
+                ) &&
+                !x.IsDeleted
+            ).ToList();
+
             List<OrderViewModel> orderViewModels = orders.Select(x => new OrderViewModel
             {
                 Id = x.Id,
@@ -167,36 +188,36 @@ namespace Bono.Orders.Application.Services
 
             if (!string.IsNullOrEmpty(filter.order) && filter.order.ToLower() == "desc")
             {
-                if (filter.order == "id")
+                if (filter.sort == "id")
                     orderViewModels = orderViewModels.OrderByDescending(x => x.Id).ToList();
 
-                if (filter.order == "customerName")
+                if (filter.sort == "customerName")
                     orderViewModels = orderViewModels.OrderByDescending(x => x.CustomerName).ToList();
 
-                if (filter.order == "dataCreated")
+                if (filter.sort == "dataCreated")
                     orderViewModels = orderViewModels.OrderByDescending(x => x.DateCreated).ToList();
 
-                if (filter.order == "dateUpdated")
+                if (filter.sort == "dateUpdated")
                     orderViewModels = orderViewModels.OrderByDescending(x => x.DateUpdated).ToList();
 
-                if (filter.order == "orderTypeName")
+                if (filter.sort == "orderTypeName")
                     orderViewModels = orderViewModels.OrderByDescending(x => x.OrderTypeName).ToList();
             }
             else
             {
-                if (filter.order == "id")
+                if (filter.sort == "id")
                     orderViewModels = orderViewModels.OrderBy(x => x.Id).ToList();
 
-                if (filter.order == "customerName")
+                if (filter.sort == "customerName")
                     orderViewModels = orderViewModels.OrderBy(x => x.CustomerName).ToList();
 
-                if (filter.order == "dateCreated")
+                if (filter.sort == "dateCreated")
                     orderViewModels = orderViewModels.OrderBy(x => x.DateCreated).ToList();
 
-                if (filter.order == "dateUpdated")
+                if (filter.sort == "dateUpdated")
                     orderViewModels = orderViewModels.OrderBy(x => x.DateUpdated).ToList();
 
-                if (filter.order == "orderTypeName")
+                if (filter.sort == "orderTypeName")
                     orderViewModels = orderViewModels.OrderBy(x => x.OrderTypeName).ToList();
             }
 
@@ -205,7 +226,7 @@ namespace Bono.Orders.Application.Services
 
         public int Count(FilterViewModel filter)
         {
-            return _orderRepository.Query(x => (filter.filter == null || x.CustomerName.Contains(filter.filter)) && !x.IsDeleted).OrderBy(x => x.CustomerName).Count();
+            return _orderRepository.Query(x => (filter.search == null || x.CustomerName.Contains(filter.search)) && !x.IsDeleted).OrderBy(x => x.CustomerName).Count();
         }
     }
 }

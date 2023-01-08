@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useTranslate, useRecordContext } from 'react-admin';
 
 export default () => {

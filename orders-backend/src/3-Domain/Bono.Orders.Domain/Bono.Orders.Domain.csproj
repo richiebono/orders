@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\4-Infrastructure\Bono.Orders.Infrastructure.Utils\Bono.Orders.Infrastructure.Utils.csproj" />
   </ItemGroup>
 

@@ -32,12 +32,14 @@ namespace Bono.Orders.Api
                 options.AddDefaultPolicy(
                     builder =>
                     {
+                        //TODO: Change this to a specific domain
                         builder.AllowAnyOrigin()
                                         .AllowAnyMethod()
                                         .AllowAnyHeader();
                     });
             });
-
+            
+            services.AddHealthChecks();
             services.AddControllersWithViews();
             services.AddJwtConfiguration();
             services.AddDbContext<BonoOrderContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("BonoOrderDB")));
@@ -64,8 +66,8 @@ namespace Bono.Orders.Api
                 app.UseHsts();
             }
 
-            app.UseSwaggerConfiguration();
-            
+            app.UseHealthChecks("/healthcheck");
+            app.UseSwaggerConfiguration();            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
