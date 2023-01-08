@@ -35,8 +35,8 @@ const QuickFilter = ({ label, source, defaultValue }: any) => {
 
 const orderFilter = [
     <SearchInput source="customerName" alwaysOn />,
-    <ReferenceInput source="orderTypeId" reference="OrderType" alwaysOn={true}>
-        <SelectInput label="resources.orders.fields.orderTypeName" source='id' optionText="type" defaultValue='2D9D8CF3-80E7-4E0A-B6A4-544B5F169DB5' emptyText="Select..." />
+    <ReferenceInput label="resources.orders.fields.orderTypeName" source="orderTypeId" reference="OrderType" alwaysOn={true}>
+        <SelectInput source='id' optionText="type" defaultValue='2D9D8CF3-80E7-4E0A-B6A4-544B5F169DB5' emptyText="Select..." />
     </ReferenceInput>,    
     <QuickFilter
         label="resources.orders.fields.customerName"
@@ -45,11 +45,10 @@ const orderFilter = [
 ];
 
 const exporter = (Orders: any) => {
-    const ordersExport = Orders.map(({order}: any) => {
+    const ordersExport = Orders.map(order => {
         const { id, userId, orderTypeId, ...orderForExport } = order; // omit backlinks and author
         return orderForExport;
     });
-    console.log(ordersExport);
     // change the rowDelimiter to change the CSV file delimiter
     return jsonExport(ordersExport, {rowDelimiter: ';'}, (err: any, csv: any) => downloadCSV(csv, 'Order'));
 };
