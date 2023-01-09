@@ -35,7 +35,7 @@ There is a `docker-compose.yml` file for starting SQLSERVER, API, and Frontend.
 
 `$ docker compose up`
 
-After running, you can stop the Docker container with
+After running, you can stop the Docker container after your tests using:
 
 `$ docker compose down`
 
@@ -56,22 +56,74 @@ http://localhost:8080/api/swagger
 http://localhost
 ```
 
-## Test K8S local
+## Test K8S local Deploy
 
 Access the infra folder:
 
 `$ cd infra`
+
+Install Kind To Create the Cluster
+
+On macOS via Homebrew:
+
+`$ brew install kind`
+
+On Windows via Chocolatey
+
+`$ choco install kind`
+
+On Linux (Installing From Release Binaries):
+
+`$ curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64`
+`$ chmod +x ./kind`
+`$ sudo mv ./kind /usr/local/bin/kind`
+
+
+Now Intall Helm:
+
+From Homebrew (macOS)
+Members of the Helm community have contributed a Helm formula build to Homebrew. This formula is generally up to date.
+
+`$ brew install helm`
+
+From Chocolatey (Windows)
+Members of the Helm community have contributed a Helm package build to Chocolatey. This package is generally up to date.
+
+`$ choco install kubernetes-helm`
+
+From Apt (Debian/Ubuntu)
+
+`$ curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null`
+`$ sudo apt-get install apt-transport-https --yes`
+`$ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list`
+`$ sudo apt-get update`
+`$ sudo apt-get install helm`
 
 Execute the command to provisioning the environment:
 
 `$ sh ./provisioning-local.sh`
 
-## Test K8S Production
+Wait for the pods to be ready:
 
-Access the infra folder:
+`$ kubectl get pods -w`
 
-`$ cd infra`
+Access the frontend url:
 
-Execute the command to provisioning the environment:
+```
 
-`$ sh ./provisioning.sh`
+http://localhost:80
+
+```
+
+Access the api url:
+
+```
+
+http://localhost:8080/api/swagger
+
+```
+
+
+Destroy the kind cluster, and all of its resources:
+
+`$ kind delete cluster --name orders-cluster`
