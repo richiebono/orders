@@ -1,3 +1,6 @@
+echo "Provisioning Metrics Server"
+sh ./k8s/metrics-server/metrics-server.sh
+
 echo "Provisioning MSSQL"
 sh ./k8s/mssql/mssql.sh
 
