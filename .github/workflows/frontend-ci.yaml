@@ -19,8 +19,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'  
-      - run: npm install
-      - run: npm ci
+      - run: npm install --global yarn
+      - run: yarn install
+      - run: npm build
       - run: npm test
       # - run: npm run test:cov
 
