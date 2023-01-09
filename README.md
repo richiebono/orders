@@ -58,10 +58,20 @@ http://localhost
 
 ## Test K8S local
 
+Access the infra folder:
+
 `$ cd infra`
+
+Execute the command to provisioning the environment:
+
 `$ sh ./provisioning-local.sh`
 
 ## Test K8S Production
 
+Access the infra folder:
+
 `$ cd infra`
+
+Execute the command to provisioning the environment:
+
 `$ sh ./provisioning.sh`
