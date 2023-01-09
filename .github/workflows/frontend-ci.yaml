@@ -3,7 +3,7 @@ name: "Build Frontend"
 on:
   workflow_run:
     workflows: ["Build Backend"]
-    branches: [main]
+    branches: [dev]
     types: 
       - completed
 
