@@ -22,6 +22,7 @@ spec:
     spec:
       containers:
         - image: richiebono/bono-orders-api:latest
+          name: orders-backend
           imagePullPolicy: IfNotPresent 
           envFrom:
             - configMapRef:
@@ -33,22 +34,26 @@ spec:
             limits:
               memory: "10Mi"
               cpu: "200m"
+          startupProbe:
+            httpGet:
+              path: /healthcheck
+              port: 80
+            failureThreshold: 30
+            periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /healthcheck
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 30
+              port: 80
+            initialDelaySeconds: 0
             periodSeconds: 10
-          name: orders-backend
-          ports:
-            - containerPort: 80
-              name: http
-              protocol: TCP
+            timeoutSeconds: 1
+            failureThreshold: 3                    
           readinessProbe:
             httpGet:
               path: /healthcheck
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 30
-            periodSeconds: 10
+              port: 80
+            successThreshold: 3
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP

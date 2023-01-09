@@ -17,3 +17,4 @@ spec:
       targetPort: 80
   selector:
     app: orders-frontend
+  type: LoadBalancer

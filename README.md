@@ -107,11 +107,19 @@ Wait for the pods to be ready:
 
 `$ kubectl get pods -w`
 
+Foward the ports to access the frontend and backend:
+
+`$ kubectl port-forward svc/orders-backend 8080`
+
+Open a new terminal and execute the follow command:
+
+`$ kubectl port-forward svc/orders-frontend 80:80`
+
 Access the frontend url:
 
 ```
 
-http://localhost:80
+http://localhost
 
 ```
 
@@ -119,11 +127,25 @@ Access the api url:
 
 ```
 
-http://localhost:8080/api/swagger
+http://localhost:8080/api/swagger/index.html
 
 ```
 
+### Test Admin User
 
-Destroy the kind cluster, and all of its resources:
+Use the follow credentials to authenticate on the first time on backend API.
+
+email: richiebono@gmail.com
+password: admin@123
+
+
+## Destroy the kind cluster, and all of its resources:
 
 `$ kind delete cluster --name orders-cluster`
+
+
+## Contact:
+
+```
+https://www.linkedin.com/in/richard-bono-75418818/
+```

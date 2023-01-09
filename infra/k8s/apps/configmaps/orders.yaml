@@ -4,6 +4,6 @@ metadata:
   name: orders-config
 data:
   NODE_ENV: production
-  URL_API: "http://orders-backend:8080/api"
-  APP_HOST: "orders-frontend"
+  URL_API: "http://orders-backend.svc:8080/api"
+  APP_HOST: "localhost"
   APP_PORT: "80"
