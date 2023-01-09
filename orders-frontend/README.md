@@ -5,22 +5,22 @@
 </h1>
 
 <p align="center">
-  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/richiebono/game-frontend?style=plastic">
+  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/richiebono/orders-frontend?style=plastic">
 
-  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/richiebono/game-frontend?style=plastic">
+  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/richiebono/orders-frontend?style=plastic">
 
-  <img alt="Repo size" src="https://img.shields.io/github/repo-size/richiebono/game-frontend?style=plastic">
+  <img alt="Repo size" src="https://img.shields.io/github/repo-size/richiebono/orders-frontend?style=plastic">
 
-  <a href="https://github.com/richiebono/game-frontend/commits/main">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/richiebono/game-frontend?style=plastic">
+  <a href="https://github.com/richiebono/orders-frontend/commits/main">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/richiebono/orders-frontend?style=plastic">
   </a>
 
-  <a href="https://github.com/richiebono/game-frontend/issues">
-    <img alt="GitHub issues" src="https://img.shields.io/github/issues/richiebono/game-frontend?style=plastic">
+  <a href="https://github.com/richiebono/orders-frontend/issues">
+    <img alt="GitHub issues" src="https://img.shields.io/github/issues/richiebono/orders-frontend?style=plastic">
   </a>
 
-  <a href="https://github.com/richiebono/game-frontend/pulls">
-    <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/richiebono/game-frontend?style=plastic">
+  <a href="https://github.com/richiebono/orders-frontend/pulls">
+    <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/richiebono/orders-frontend?style=plastic">
   </a>
 </p>
 

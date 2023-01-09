@@ -1,5 +1,5 @@
 {
-  "name": "game-frontend",
+  "name": "orders-frontend",
   "version": "0.0.1",
   "main": "src/index.tsx",
   "license": "MIT",

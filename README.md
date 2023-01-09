@@ -56,4 +56,12 @@ http://localhost:8080/api/swagger
 http://localhost
 ```
 
+## Test K8S local
 
+`$ cd infra`
+`$ sh ./provisioning-local.sh`
+
+## Test K8S Production
+
+`$ cd infra`
+`$ sh ./provisioning.sh`
