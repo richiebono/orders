@@ -1,4 +1,4 @@
-name: "Build Backend"
+name: Build Backend
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  test:
+  test-backend:
     runs-on: ubuntu-latest
     env:
       WORKING_DIRECTORY: ./orders-backend/src/
@@ -30,7 +30,7 @@ jobs:
     - name: Test with dotnet
       run: dotnet test ${{ env.WORKING_DIRECTORY }}Bono.Orders.sln --configuration Release /warnaserror -v=normal
   
-  build:   
+  build-backend:   
     runs-on: ubuntu-latest
     needs: [test-backend]
     env:
