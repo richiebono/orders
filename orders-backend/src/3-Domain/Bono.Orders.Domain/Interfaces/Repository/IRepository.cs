@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -13,9 +14,9 @@ namespace Bono.Orders.Domain.Interfaces.Repository
 
         List<TEntity> Create(List<TEntity> model);
 
-        bool Update(TEntity model);
+        bool Update(TEntity model, Expression<Func<TEntity, bool>> where);
 
-        bool Update(List<TEntity> model);
+        bool Update(List<TEntity> model, Expression<Func<TEntity, bool>> where);
 
         bool Delete(TEntity model);
 
@@ -39,7 +40,7 @@ namespace Bono.Orders.Domain.Interfaces.Repository
 
         Task<TEntity> CreateAsync(TEntity model);
 
-        Task<bool> UpdateAsync(TEntity model);
+        Task<bool> UpdateAsync(TEntity model, Expression<Func<TEntity, bool>> where);
 
         Task<bool> DeleteAsync(Expression<Func<TEntity, bool>> where);
 

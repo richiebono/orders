@@ -6,7 +6,7 @@ namespace Bono.Orders.Domain.Validations
 {
     public class ValidationResult
     {
-        public dynamic Entity { get; set; }
+        public dynamic Data { get; set; }
         private readonly List<ValidationError> _Errors;
         private string Message { get; set; }
         public bool IsValid { get { return !_Errors.Any(); } }

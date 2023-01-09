@@ -1,8 +1,8 @@
-export default {
+export default  {
 
     login: ({ username, password }: any) => {
         
-        const request = new Request(`${ process.env.URL_API }Users/authenticate/`, {
+        const request = new Request(`${ process.env.URL_API }/Users/authenticate/`, {
             method: 'POST',
             body: JSON.stringify({ email: username, password }),
             headers: new Headers({ 'Content-Type': 'application/json; charset=utf-8' }),
@@ -18,24 +18,6 @@ export default {
                 console.log({ response });
                 localStorage.setItem('auth', JSON.stringify(response));
             });
-
-
-
-        // return axios.post(`${ process.env.URL_API }Users/authenticate/`, 
-        //     {   
-        //         email: username,
-        //         password
-        //     }
-        //     )
-        //     .then(response => {
-        //         localStorage.setItem('auth', JSON.stringify(response.data));
-        //         return Promise.resolve();
-        //     }
-        //     )
-        //     .catch(error => {
-        //         console.log(error);
-        //         return Promise.reject();
-        //     });
     },
     logout: () => {
         localStorage.removeItem('auth');

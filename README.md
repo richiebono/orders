@@ -1,5 +1,5 @@
 # Introduction 
-Order Management System.
+Orders Project using .NetCore on backend APIs, React and React Admin on frontend, validation using SonarQube.
 
 ## Docker
 
@@ -39,11 +39,21 @@ After running, you can stop the Docker container with
 
 `$ docker compose down`
 
+IMPORTANT: If you change something on the project you need to execute the follow command before "docker compose up".
+
+`$ docker compose build` 
+
 
 ## Url Swagger for Api Documentation
 
 ```
 http://localhost:8080/api/swagger
+```
+
+## Frontend URL
+
+```
+http://localhost
 ```
 
 

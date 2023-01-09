@@ -1,7 +1,7 @@
 <h1 align="center">
     <img alt="template-react-ts" src="https://res.cloudinary.com/zagatti/image/upload/v1595947810/readme/react-ts-template/Al9qmDn_j0eiug.png" />
     <br>
-    React Typescript Template
+   React Typescript Frontend
 </h1>
 
 <p align="center">
@@ -37,7 +37,7 @@
 <div align="center">
 
   <p align="center">
-    I recently started using React by creating my own Webpack and configuring the project as I think it looks best, so I created this initial template and I intend to keep it updated.
+    Orders Project using React and React Admin on frontend.
   </p>
 
 </div>
@@ -76,61 +76,7 @@ To run the tests, after the dependencies are installed, run `yarn test`.
 
 `yarn test:coverage` to generate the test coverage report in the files.
 
-## ✏️ Customize
-
-You have the freedom to change everything in your project, from the settings of Webpack, Jest and even create new structures.
-
-Example of a private route:
-
-<details>
-  <summary>Route.tsx</summary>
-
-```ts
-import React from 'react';
-import {
-  Route as ReactDOMRoute,
-  RouteProps as ReactDOMRouteProps,
-  Redirect,
-} from 'react-router-dom';
-
-import { useAuth } from '../hooks/auth';
-
-interface RouteProps extends ReactDOMRouteProps {
-  isPrivate?: boolean;
-  component: React.ComponentType;
-}
-
-const Route: React.FC<RouteProps> = ({
-  isPrivate = false,
-  component: Component,
-  ...rest
-}) => {
-  const { user } = useAuth();
-  // You can store user data in another way and only retrieve it here
-
-  return (
-    <ReactDOMRoute
-      {...rest}
-      render={({ location }) => {
-        return isPrivate === !!user ? (
-          <Component />
-        ) : (
-          <Redirect
-            to={{
-              pathname: isPrivate ? '/' : '/dashboard',
-              state: { from: location },
-            }}
-          />
-        );
-      }}
-    />
-  );
-};
-
-export default Route;
-```
-
-</details>
+IMPORTANT: It would help if you opened docker-compose.yaml on the root folder and comment "bono-orders-frontend" application then execute the docker-compose.yaml to be able to test the frontend locally.
 
 ## ✈️ Deploy
 
@@ -140,4 +86,4 @@ nginx. But you are able to run `yarn build` and make your own deploy.
 
 ---
 
-Made with 💟 by André Zagatti 👋 [Talk to me!](https://www.linkedin.com/in/andre-zagatti/)
+Made with 💟 by Richard Bono 👋 [Talk to me!](https://www.linkedin.com/in/richard-bono-75418818/)

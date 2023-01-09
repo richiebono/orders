@@ -44,9 +44,9 @@ namespace Bono.Orders.Application.Services
 
             UserRole userRole = mapper.Map<UserRole>(UserRoleViewModel);
             
-            validationResult.Entity = this.UserRoleRepository.Create(userRole);
+            validationResult.Data = this.UserRoleRepository.Create(userRole);
 
-            if (validationResult.Entity == null)
+            if (validationResult.Data == null)
             {
                 validationResult.Add("The Entity you are trying to record is null, please try again!");
             }
@@ -80,7 +80,7 @@ namespace Bono.Orders.Application.Services
             
             try
             {
-                this.UserRoleRepository.Update(UserRole);
+                this.UserRoleRepository.Update(UserRole, x => x.Id == UserRole.Id);
             }
             catch (Exception ex)
             {

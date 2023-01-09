@@ -40,11 +40,21 @@ After running, you can stop the Docker container with
 `$ docker compose down`
 
 
+
 ## Url Swagger for Api Documentation
 
 ```
 http://localhost:8080/api/swagger
 ```
+
+### Test Admin User
+
+Use the follow credentials to authenticate on the first time on backend API.
+
+email: richiebono@gmail.com
+password: admin@123
+
+
 
 ## Contact:
 

@@ -73,7 +73,7 @@ namespace Bono.Orders.Api.Controllers
 
                 if (result.IsValid)
                 {
-                    return Ok(result.Entity);
+                    return Ok(result.Data);
                 }
                 return Unauthorized(result);
             }

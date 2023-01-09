@@ -47,6 +47,7 @@ namespace Bono.Orders.Application.ViewModels
         public int AccessFailedCount { get; set; }
         
         public string SecurityStamp { get; set; }
+        public string[] Roles { get; set; }
 
     }
 }

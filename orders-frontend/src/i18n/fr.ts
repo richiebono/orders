@@ -3,57 +3,48 @@ import frenchMessages from 'ra-language-french';
 export default {
     simple: {
         action: {
-            close: 'Close',
-            resetViews: 'Reset views',
+            close: 'Fermer',
+            resetViews: 'Réinitialiser les vues',
         },
-        'create-order': 'New Order',
+        'create-order': 'Nouvelle Pédido',
     },
     ...frenchMessages,
     resources: {
         orders: {
-            name: 'Order |||| Order',
+            name: 'Pédido |||| Pédido',
             fields: {
-                id: 'Order ID',
+                id: 'Numéro de Pédido',
                 customerName: 'Customer Name',
-                dateCreated: 'Create Date',
+                orderTypeName: 'Taper de Pédido',
+                dateCreated: 'Date de création',
+                dateUpdated: 'Date de mise à jour',
+                userName: 'Utilisatrice',
             },
         },        
         users: {
-            name: 'User |||| Users',
+            name: 'Utilisatrice |||| Utilisatrice',
             fields: {
-                name: 'Name',
-                role: 'Role',
+                name: 'Nom',
+                role: 'Rôle',
             },
         },
     },
     order: {
         list: {
-            search: 'Search',
+            search: 'Rechercher',
         },
         form: {
-            summary: 'Summary'
+            summary: 'Résumé'
         },
         edit: {
-            title: 'Orders "%{customerName}"',
+            title: 'Pédido',
         },
         action: {
-            save_and_edit: 'Save and Edit',
-            save_and_add: 'Save and Add',
-            save_and_show: 'Save and Show',
-            save_with_average_note: 'Save with Note',
+            save_and_edit: 'Enregistrer et modifier',
+            save_and_add: 'Enregistrer et ajouter',
+            save_and_show: 'Enregistrer et afficher',
+            save_with_average_note: 'Enregistrer avec note',
         },
-    },
-    user: {
-        list: {
-            search: 'Search',
-        },
-        form: {
-            summary: 'Summary',
-            security: 'Security',
-        },
-        action: {
-            save_and_add: 'Save and Add',
-            save_and_show: 'Save and Show',
-        },
-    },
+    }
+    
 };

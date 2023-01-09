@@ -1,15 +1,11 @@
-import * as React from 'react';
 import { Fragment, memo } from 'react';
 import BookIcon from '@mui/icons-material/Book';
 import { Box, Chip, useMediaQuery } from '@mui/material';
 import { Theme, styled } from '@mui/material/styles';
-import lodashGet from 'lodash/get';
 import jsonExport from 'jsonexport/dist';
 import {
-    BooleanField,
     BulkDeleteButton,
     BulkExportButton,
-    ChipField,
     SelectColumnsButton,
     CreateButton,
     DatagridConfigurable,
@@ -19,19 +15,17 @@ import {
     ExportButton,
     FilterButton,
     List,
-    NumberField,
-    ReferenceArrayField,
     SearchInput,
     ShowButton,
     SimpleList,
-    SingleFieldList,
     TextField,
-    TextInput,
     TopToolbar,
     useTranslate,
+    ReferenceInput,
+    SelectInput,
+    required,
 } from 'react-admin'; // eslint-disable-line import/no-unresolved
 
-import ResetViewsButton from './ResetViewsButton';
 export const OrderIcon = BookIcon;
 
 const QuickFilter = ({ label, source, defaultValue }: any) => {
@@ -41,21 +35,24 @@ const QuickFilter = ({ label, source, defaultValue }: any) => {
 
 const orderFilter = [
     <SearchInput source="customerName" alwaysOn />,
+    <ReferenceInput label="resources.orders.fields.orderTypeName" source="orderTypeId" reference="OrderType" alwaysOn={true}>
+        <SelectInput source='id' optionText="type" defaultValue='2D9D8CF3-80E7-4E0A-B6A4-544B5F169DB5' emptyText="Select..." />
+    </ReferenceInput>,    
     <QuickFilter
         label="resources.orders.fields.customerName"
         source="customerName"
-        defaultValue
     />,
 ];
 
-const exporter = orders => {
-    const data = orders.map(order => ({
-        ...order,
-        backlinks: lodashGet(order, 'backlinks', []).map(
-            backlink => backlink.url
-        ),
-    }));
-    return jsonExport(data, (err: any, csv: any) => downloadCSV(csv, 'orders'));
+const exporter = (Orders: any) => {
+   
+    const ordersExport = Orders.map((order: any) => {
+        const { id, userId, orderTypeId, ...orderForExport } = order; // omit backlinks and author
+        return orderForExport;
+    });
+
+    // change the rowDelimiter to change the CSV file delimiter
+    return jsonExport(ordersExport, {rowDelimiter: ';'}, (err: any, csv: any) => downloadCSV(csv, 'Order'));
 };
 
 const StyledDatagrid = styled(DatagridConfigurable)(({ theme }) => ({
@@ -78,7 +75,6 @@ const StyledDatagrid = styled(DatagridConfigurable)(({ theme }) => ({
 
 const OrderListBulkActions = memo(({ children, ...props }: any) => (
     <Fragment>
-        <ResetViewsButton {...props} />
         <BulkDeleteButton {...props} />
         <BulkExportButton {...props} />
     </Fragment>
@@ -97,17 +93,13 @@ const OrderListActionToolbar = ({ children, ...props }: any) => (
     <Box sx={{ alignItems: 'center', display: 'flex' }}>{children}</Box>
 );
 
-const rowClick = (id, resource, record) => {
-    if (record.customerName) {
+const rowClick = ({id, resource, record}: any) => {
+    if (id) {
         return 'edit';
     }
 
     return 'show';
 };
-
-const OrderPanel = ({ id, record, resource }) => (
-    <div dangerouslySetInnerHTML={{ __html: record.body }} />
-);
 
 const OrderList = () => {
     const isSmall = useMediaQuery<Theme>(theme => theme.breakpoints.down('md'));
@@ -130,12 +122,20 @@ const OrderList = () => {
                 <StyledDatagrid
                     bulkActionButtons={<OrderListBulkActions />}
                     rowClick={rowClick}
-                    expand={OrderPanel}                    
                 >
-                    <TextField source="id" />
-                    <TextField source="customerName" cellClassName="title" />
+                    <TextField label="resources.orders.fields.id" source="id" />
+                    <TextField label="resources.orders.fields.orderTypeName" source="orderTypeName" cellClassName="title" />
+                    <TextField label="resources.orders.fields.customerName" source="customerName" cellClassName="title" />
+                    <TextField label="resources.orders.fields.userName" source="userName" cellClassName="title" />
                     <DateField
+                        label="resources.orders.fields.dateCreated"
                         source="dateCreated"
+                        sortByOrder="DESC"
+                        cellClassName="publishedAt"
+                    />
+                    <DateField
+                        label="resources.orders.fields.dateUpdated"
+                        source="dateUpdated"
                         sortByOrder="DESC"
                         cellClassName="publishedAt"
                     />
