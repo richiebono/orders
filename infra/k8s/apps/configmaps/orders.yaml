@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orders-config
+data:
+  NODE_ENV: production
+  URL_API: "http://orders-backend:8080/api"
+  APP_HOST: "orders-frontend"
+  APP_PORT: "80"

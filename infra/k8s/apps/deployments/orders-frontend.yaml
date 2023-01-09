@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    version: v1
+    app: orders-frontend
+  name: orders-frontend
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: orders-frontend
+  template:
+    metadata:
+      labels:
+        app: orders-frontend
+        version: v1
+        stack: echo
+        interface: rest
+        language: reactjs
+    spec:
+      containers:
+        - image: richiebono/orders-frontend:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "5Mi"
+              cpu: "100m"
+            limits:
+              memory: "10Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 1
+          name: orders-frontend
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /liveness
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 1

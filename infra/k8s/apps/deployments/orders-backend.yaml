@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    version: v1
+    app: orders-backend
+  name: orders-backend
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: orders-backend
+  template:
+    metadata:
+      labels:
+        app: orders-backend
+        version: v1
+        stack: echo
+        interface: rest
+        language: C#
+    spec:
+      containers:
+        - image: richiebono/orders-orders-api:latest
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: orders-config
+          resources:
+            requests:
+              memory: "5Mi"
+              cpu: "100m"
+            limits:
+              memory: "10Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 1
+          name: orders-backend
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /liveness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 1
