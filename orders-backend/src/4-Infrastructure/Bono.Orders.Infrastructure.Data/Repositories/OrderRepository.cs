@@ -22,12 +22,12 @@ namespace Bono.Orders.Data.Repositories
             return Query(x => !x.IsDeleted);
         }
 
-        public IQueryable<Order> Query(Expression<Func<Order, bool>> where)
+        public new IQueryable<Order> Query(Expression<Func<Order, bool>> where)
         {
             return _context.Order.Include(x => x.User).Include(x => x.Type).Where(where);
         }
 
-        public Order Find(Expression<Func<Order, bool>> where)
+        public new Order Find(Expression<Func<Order, bool>> where)
         {
             return _context.Order.Include(x => x.User).Include(x => x.Type).Where(where).FirstOrDefault();
         }
