@@ -18,11 +18,11 @@ spec:
         version: v1
         stack: echo
         interface: rest
-        language: C#
+        language: csharp
     spec:
       containers:
-        - image: richiebono/orders-orders-api:latest
-          imagePullPolicy: Always
+        - image: richiebono/bono-orders-api:latest
+          imagePullPolicy: IfNotPresent 
           envFrom:
             - configMapRef:
                 name: orders-config
@@ -35,10 +35,11 @@ spec:
               cpu: "200m"
           livenessProbe:
             httpGet:
-              path: /liveness
+              path: /healthcheck
               port: 8080
               scheme: HTTP
-            initialDelaySeconds: 1
+            initialDelaySeconds: 30
+            periodSeconds: 10
           name: orders-backend
           ports:
             - containerPort: 80
@@ -46,7 +47,8 @@ spec:
               protocol: TCP
           readinessProbe:
             httpGet:
-              path: /liveness
+              path: /healthcheck
               port: 8080
               scheme: HTTP
-            initialDelaySeconds: 1
+            initialDelaySeconds: 30
+            periodSeconds: 10
