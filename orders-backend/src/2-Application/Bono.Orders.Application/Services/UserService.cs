@@ -10,6 +10,8 @@ using System.ComponentModel.DataAnnotations;
 using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 using ValidationResult = Bono.Orders.Domain.Validations.ValidationResult;
 using Bono.Orders.Infrastructure.Utils;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Bono.Orders.Application.Services
 {
@@ -27,7 +29,7 @@ namespace Bono.Orders.Application.Services
             this.mapper = mapper;
             this.validationResult = validationResult;
             this.security = security;
-        }        
+        }
 
         public IEnumerable<UserViewModel> GetAll()
         {
@@ -45,7 +47,7 @@ namespace Bono.Orders.Application.Services
                 validationResult.Add("UserID must be empty");
                 return validationResult;
             }
-            
+
             if (string.IsNullOrEmpty(userViewModel.Cpf) || string.IsNullOrEmpty(userViewModel.Email) || string.IsNullOrEmpty(userViewModel.FirstName) || string.IsNullOrEmpty(userViewModel.LastName) || string.IsNullOrEmpty(userViewModel.ConfirmPassword) || string.IsNullOrEmpty(userViewModel.Password) || string.IsNullOrEmpty(userViewModel.UserName))
             {
                 validationResult.Add("The sent object was empty.");
@@ -65,9 +67,9 @@ namespace Bono.Orders.Application.Services
             //    validationResult.Add("The Entity you are trying to record is null, please try again!");
             //    return validationResult;
             //}
-            
+
             return validationResult;
-            
+
         }
 
         public UserViewModel GetById(string id)
@@ -89,7 +91,7 @@ namespace Bono.Orders.Application.Services
                 validationResult.Add("ID is invalid");
                 return validationResult;
             }
-            
+
 
             User user = this.userRepository.Find(x => x.Id == userViewModel.Id && !x.IsDeleted);
             if (user == null)
@@ -97,14 +99,14 @@ namespace Bono.Orders.Application.Services
                 validationResult.Add("User not found");
                 return validationResult;
             }
-            
-            
+
+
             user = mapper.Map<User>(userViewModel);
             user.SetPassword(security.EncryptPassword(user.Password));
 
             try
             {
-                this.userRepository.Update(user, x=> x.Id == user.Id);
+                this.userRepository.Update(user, x => x.Id == user.Id);
             }
             catch (Exception ex)
             {
@@ -123,7 +125,7 @@ namespace Bono.Orders.Application.Services
             }
 
             User _user = this.userRepository.Find(x => x.Id == userId && !x.IsDeleted);
-            
+
             if (_user == null)
                 throw new Exception("User not found");
 
@@ -135,40 +137,42 @@ namespace Bono.Orders.Application.Services
             {
                 validationResult.Add(ex.Message);
             }
-           
+
             return validationResult;
 
-            
+
         }
 
         public ValidationResult Authenticate(UserAuthenticateRequestViewModel user)
         {
-            
+
             if (string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
             {
                 validationResult.Add("Email/Password are required.");
                 return validationResult;
             }
-                
+
 
             user.Password = security.EncryptPassword(user.Password);
 
-            User _user = this.userRepository.Find(x => !x.IsDeleted && x.Email.ToLower() == user.Email.ToLower()
-                                                    && x.Password.ToLower() == user.Password.ToLower());
+            User _user = this.userRepository.Query(x => !x.IsDeleted && x.Email.ToLower() == user.Email.ToLower()
+                                                    && x.Password.ToLower() == user.Password.ToLower()).Include(x => x.Roles).ThenInclude(x => x.Role).FirstOrDefault();
             if (_user == null)
             {
                 validationResult.Add("User not found");
                 return validationResult;
             }
-            
 
+            var users = mapper.Map<UserViewModel>(_user);
+            users.Roles = _user.Roles.Select(x => x.Role.Name).ToArray();
+            
             if (validationResult.IsValid)
-                validationResult.Data = new UserAuthenticateResponseViewModel(mapper.Map<UserViewModel>(_user), TokenService.GenerateToken(_user));
+                validationResult.Data = new UserAuthenticateResponseViewModel(users, TokenService.GenerateToken(_user));;
 
 
             return validationResult;
         }
 
-        
+
     }
 }

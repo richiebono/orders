@@ -221,7 +221,7 @@ namespace Bono.Orders.Application.Services
                     orderViewModels = orderViewModels.OrderBy(x => x.OrderTypeName).ToList();
             }
 
-            return orderViewModels.Skip(filter.start).Take(filter.size).ToList();
+            return orderViewModels.Skip(filter.start).Take(filter.size+1).ToList();
         }
 
         public int Count(FilterViewModel filter)

@@ -69,7 +69,7 @@ namespace Bono.Orders.Application.Services
                 orderTypeViewModels = orderTypeViewModels.OrderBy(x => x.Type).ToList();
             }
 
-            return orderTypeViewModels.Skip(filter.start).Take(filter.size).ToList();
+            return orderTypeViewModels.Skip(filter.start).Take(filter.size+1).ToList();
         }
 
         public int Count(FilterViewModel filter)

@@ -33,7 +33,9 @@ const config = {
 
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],
-    plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })],
+    plugins: [
+      new TsconfigPathsPlugin({ configFile: './tsconfig.json' }),
+    ],
     alias: {
       'src': path.join(__dirname, 'src')
     }

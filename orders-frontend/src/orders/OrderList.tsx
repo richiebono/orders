@@ -45,10 +45,12 @@ const orderFilter = [
 ];
 
 const exporter = (Orders: any) => {
-    const ordersExport = Orders.map(order => {
+   
+    const ordersExport = Orders.map((order: any) => {
         const { id, userId, orderTypeId, ...orderForExport } = order; // omit backlinks and author
         return orderForExport;
     });
+
     // change the rowDelimiter to change the CSV file delimiter
     return jsonExport(ordersExport, {rowDelimiter: ';'}, (err: any, csv: any) => downloadCSV(csv, 'Order'));
 };
