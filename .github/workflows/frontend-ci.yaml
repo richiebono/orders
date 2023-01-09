@@ -32,7 +32,7 @@ jobs:
       DOCKER_REPOSITORY: richiebono
       IMAGE_NAME: orders-frontend
       IMAGE_TAG: ${{github.run_number}}
-      WORKING_DIRECTORY: .
+      WORKING_DIRECTORY: './orders-frontend'
 
     defaults:
       run:
