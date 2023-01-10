@@ -44,7 +44,7 @@ IMPORTANT: If you change something on the project you need to execute the follow
 `$ docker compose build` 
 
 
-## Url Swagger for Api Documentation
+## Url Swagger for API Documentation
 
 ```
 http://localhost:8080/api/swagger
@@ -79,7 +79,7 @@ On Linux (Installing From Release Binaries):
 `$ sudo mv ./kind /usr/local/bin/kind`
 
 
-Now Intall Helm:
+Now Install Helm:
 
 From Homebrew (macOS)
 Members of the Helm community have contributed a Helm formula build to Homebrew. This formula is generally up to date.
@@ -103,7 +103,7 @@ From Apt (Debian/Ubuntu)
 
 `$ sudo apt-get install helm`
 
-Execute the command to provisioning the environment:
+Execute the command to provision the environment:
 
 `$ sh ./provisioning-local.sh`
 
@@ -119,19 +119,19 @@ if external ip is pending, execute the follow command:
 
 `$ docker network inspect -f '{{.IPAM.Config}}' kind`
 
-then execute the follow command change the ip address on metallb-configmap.yaml file using this ip that you got from the previous command, and execute the follow command:
+then execute the following command to change the IP address on metallb-configmap.yaml file using this IP that you got from the previous command, and execute the following command:
 
 `$ kubectl apply -f metallb-configmap.yaml`
 
-Foward the ports to access the frontend and backend:
+Forward the ports to access the frontend and backend:
 
 `$ kubectl port-forward svc/orders-backend 8080:80`
 
-Open a new terminal and execute the follow command:
+Open a new terminal and execute the following command:
 
 `$ kubectl port-forward svc/orders-frontend 80:80`
 
-Access the api url:
+Access the API URL:
 
 ```
 
@@ -139,20 +139,21 @@ http://localhost:8080/api/swagger/index.html
 
 ```
 
-Use th endpoint authenticate to get the token, it will create the database and tables automatically.
+Use the endpoint "authenticate" to get the token
+Important: it will create the database and tables automatically.
 
 ```
 /api/Users/authenticate
 
 ```
 
-Use the follow credentials to authenticate on the first time on backend API.
+Use the following credentials to authenticate for the first time on the backend API.
 
 email: richiebono@gmail.com
 password: admin@123
 
 
-Access the frontend url:
+Access the frontend URL:
 
 ```
 
@@ -160,7 +161,7 @@ http://localhost
 
 ```
 
-You can use the same credentials from backend to login on frontend.
+You can use the same credentials from the backend to login on frontend.
 
 
 ## Destroy the kind cluster, and all of its resources:
