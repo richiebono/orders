@@ -12,9 +12,9 @@ metadata:
 spec:
   ports:
     - name: http
-      port: 8080
+      port: 80 # 8080 
       protocol: TCP
       targetPort: 80
   selector:
     app: orders-backend
-  type: LoadBalancer
+  type: LoadBalancer # LoadBalancer

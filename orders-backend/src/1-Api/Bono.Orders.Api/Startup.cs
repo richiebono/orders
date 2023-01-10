@@ -42,6 +42,7 @@ namespace Bono.Orders.Api
             services.AddHealthChecks();
             services.AddControllersWithViews();
             services.AddJwtConfiguration();
+            Console.WriteLine("BonoOrderConnection: " + Configuration.GetConnectionString("BonoOrderDB"));
             services.AddDbContext<BonoOrderContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("BonoOrderDB")));
             NativeInjector.RegisterServices(services);
             services.AddAutoMapper(typeof(AutoMapperSetup));

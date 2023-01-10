@@ -131,14 +131,6 @@ Open a new terminal and execute the follow command:
 
 `$ kubectl port-forward svc/orders-frontend 80:80`
 
-Access the frontend url:
-
-```
-
-http://localhost
-
-```
-
 Access the api url:
 
 ```
@@ -147,12 +139,28 @@ http://localhost:8080/api/swagger/index.html
 
 ```
 
-### Test Admin User
+Use th endpoint authenticate to get the token, it will create the database and tables automatically.
+
+```
+/api/Users/authenticate
+
+```
 
 Use the follow credentials to authenticate on the first time on backend API.
 
 email: richiebono@gmail.com
 password: admin@123
+
+
+Access the frontend url:
+
+```
+
+http://localhost
+
+```
+
+you can the the same credentials from backend to login on frontend.
 
 
 ## Destroy the kind cluster, and all of its resources:

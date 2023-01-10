@@ -24,10 +24,10 @@ namespace Bono.Orders.Data.Context
             this.settings = settings;
             this.security = security;
 
-            if (settings.IsDevelopment)
-            {
+            // if (settings.IsDevelopment)
+            // {
                 Database.Migrate();
-            }
+            // }
             
 
         }

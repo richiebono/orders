@@ -54,6 +54,6 @@ spec:
               port: 80
             successThreshold: 3
           ports:
-            - containerPort: 8080
+            - containerPort: 80 # 8080
               name: http
               protocol: TCP
