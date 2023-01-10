@@ -160,7 +160,7 @@ http://localhost
 
 ```
 
-you can the the same credentials from backend to login on frontend.
+You can use the same credentials from backend to login on frontend.
 
 
 ## Destroy the kind cluster, and all of its resources:
