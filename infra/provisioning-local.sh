@@ -2,7 +2,6 @@ echo "Provisioning Kind Clusters"
 kind create cluster --name orders-cluster
 
 echo "Pull Images"
-
 docker pull quay.io/metallb/controller:v0.13.7
 docker pull quay.io/metallb/speaker:v0.13.7
 docker pull k8s.gcr.io/metrics-server/metrics-server:v0.6.2
@@ -24,6 +23,9 @@ sh ./k8s/metallb/metallb.sh
 echo "Provisioning Metrics Server"
 sh ./k8s/metrics-server/metrics-server.sh
 
+echo "Provisioning Nginx"
+sh ./k8s/nginx/nginx.sh
+
 echo "Provisioning MSSQL"
 sh ./k8s/mssql/mssql.sh
 
@@ -42,3 +44,5 @@ kubectl apply -f ./k8s/apps/services/
 echo "Create All HPA"
 kubectl apply -f ./k8s/apps/hpa/
 
+# echo "Create All Ingress"
+# kubectl apply -f ./k8s/apps/ingress/
