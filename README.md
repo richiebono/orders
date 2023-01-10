@@ -111,6 +111,18 @@ Wait for the pods to be ready:
 
 `$ kubectl get pods -w`
 
+Check the services:
+
+`$ kubectl get svc`
+
+if external ip is pending, execute the follow command:
+
+`$ docker network inspect -f '{{.IPAM.Config}}' kind`
+
+then execute the follow command change the ip address on metallb-configmap.yaml file using this ip that you got from the previous command, and execute the follow command:
+
+`$ kubectl apply -f metallb-configmap.yaml`
+
 Foward the ports to access the frontend and backend:
 
 `$ kubectl port-forward svc/orders-backend 8080`
