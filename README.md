@@ -125,7 +125,7 @@ then execute the follow command change the ip address on metallb-configmap.yaml 
 
 Foward the ports to access the frontend and backend:
 
-`$ kubectl port-forward svc/orders-backend 8080`
+`$ kubectl port-forward svc/orders-backend 8080:80`
 
 Open a new terminal and execute the follow command:
 
