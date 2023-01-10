@@ -35,11 +35,11 @@ There is a `docker-compose.yml` file for starting SQLSERVER, API, and Frontend.
 
 `$ docker compose up`
 
-After running, you can stop the Docker container after your tests using:
+You can stop the Docker container, after your tests, using:
 
 `$ docker compose down`
 
-IMPORTANT: If you change something on the project you need to execute the follow command before "docker compose up".
+IMPORTANT: If you change something on the project you need to execute the following command before "docker compose up".
 
 `$ docker compose build` 
 
