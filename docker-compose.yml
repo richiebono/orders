@@ -2,27 +2,27 @@ version: '3.4'
 
 services:
   
-  # bono-orders-infrastructure-sql-data:    
-  #   image: mcr.microsoft.com/mssql/server:2017-latest
-  #   container_name: bono-orders-infrastructure-sql-data
-  #   environment:
-  #     - ACCEPT_EULA=Y
-  #     - SA_PASSWORD=H@rd2103211943
-  #   volumes:
-  #     - mssql-server-linux-data:/var/opt/mssql/data   
-  #   ports:
-  #     - "1433:1433"
+  bono-orders-infrastructure-sql-data:    
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    container_name: bono-orders-infrastructure-sql-data
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=H@rd2103211943
+    volumes:
+      - mssql-server-linux-data:/var/opt/mssql/data   
+    ports:
+      - "1433:1433"
              
-  # bono-orders-api:
-  #   image: richiebono/bono-orders-api:latest
-  #   container_name: bono-orders-api
-  #   build:
-  #     context: ./orders-backend/src/
-  #     dockerfile: 1-Api/Bono.Orders.Api/Dockerfile
-  #   ports:
-  #     - "8080:80"
-  #   depends_on:    
-  #     - bono-orders-infrastructure-sql-data  
+  bono-orders-api:
+    image: richiebono/bono-orders-api:latest
+    container_name: bono-orders-api
+    build:
+      context: ./orders-backend/src/
+      dockerfile: 1-Api/Bono.Orders.Api/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:    
+      - bono-orders-infrastructure-sql-data  
   
   bono-orders-frontend:
     image: richiebono/orders-frontend:latest
